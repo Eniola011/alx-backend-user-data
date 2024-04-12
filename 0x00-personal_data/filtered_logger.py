@@ -9,6 +9,7 @@ Filtered Datum
 from os import getenv
 from typing import List
 import logging
+import mysql.connector
 import re
 
 
@@ -71,4 +72,19 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-
+def get_db():
+    """
+        >> A connector to the database.
+        >> using environment variables for connection details.
+    """
+    username = getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    database = getenv("PERSONAL_DATA_DB_NAME")
+    # MySQLConnection: A connection object to the MySQL database.
+    return mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=database
+    )
