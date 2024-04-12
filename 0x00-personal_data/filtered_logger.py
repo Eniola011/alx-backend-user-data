@@ -11,6 +11,9 @@ import logging
 import re
 
 
+PII_FIELDS = ('name', 'password', 'phone', 'ssn', 'email')
+
+
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """
@@ -48,3 +51,20 @@ class RedactingFormatter(logging.Formatter):
         original_message = super().format(record)
         return filter_datum(self.fields, self.REDACTION,
                             original_message, self.SEPARATOR)
+
+
+def get_logger() -> logging.Logger:
+    """
+        >> Creates a Logger object with specific settings.
+    """
+    logger = logging.getLogger("user_data")  # should be named "user_data"
+    logger.setLevel(logging.INFO)  # only log up to logging.INFO level.
+    logger.propagate = False  # should not propagate messages to other loggers.
+    # It should have a StreamHandler with RedactingFormatter as formatter.
+    stream_handler = logging.StreamHandler()
+    # PII_FIELDS: contains the fields from user_data.csv..
+    # ..that are considered PII.
+    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.addHandler(stream_handler)
+
+    return logger
