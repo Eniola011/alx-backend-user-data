@@ -7,6 +7,7 @@ Filtered Datum
 
 
 from typing import List
+import logging
 import re
 
 
@@ -22,3 +23,18 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     """
     regex = '|'.join(f'(?<={field}=)[^{separator}]+' for field in fields)
     return re.sub(regex, redaction, message)
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self):
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        NotImplementedError
