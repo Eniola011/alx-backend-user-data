@@ -79,11 +79,15 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         >> Return:
            > MySQLConnection: A connection object to the MySQL database.
     """
-    db_connection = mysql.connector.connection.MySQLConnection(
-        user=getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-        password=getenv('PERSONAL_DATA_DB_PASSWORD', ''),
-        host=getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-        database=getenv('PERSONAL_DATA_DB_NAME')
+    usr = getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    pwd = getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    db_host = getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    dbname = getenv("PERSONAL_DATA_DB_NAME")
+    db_connection = mysql.connector.connection(
+        user=usr,
+        password=pwd,
+        host=db_host,
+        database=dbname,
     )
 
     return db_connection
@@ -106,7 +110,6 @@ def main():
 
     cursor.close()
     mydatabase.close()
-
 
 
 if __name__ == "__main__":
