@@ -106,3 +106,8 @@ def main():
 
     cursor.close()
     mydatabase.close()
+
+
+
+if __name__ == "__main__":
+    main()
