@@ -82,7 +82,7 @@ def get_db():
     host = getenv("PERSONAL_DATA_DB_HOST", "localhost")
     database = getenv("PERSONAL_DATA_DB_NAME")
     # MySQLConnection: A connection object to the MySQL database.
-    return mysql.connector.connect(
+    return mysql.connector.connect.MySQLConnection(
         user=username,
         password=password,
         host=host,
