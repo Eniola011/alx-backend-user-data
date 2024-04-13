@@ -76,15 +76,14 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """
         >> A connector to the database.
         >> using environment variables for connection details.
+        >> Return:
+           > MySQLConnection: A connection object to the MySQL database.
     """
-    username = getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    password = getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    host = getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    database = getenv("PERSONAL_DATA_DB_NAME")
-    # MySQLConnection: A connection object to the MySQL database.
-    return mysql.connector.connect.MySQLConnection(
-        user=username,
-        password=password,
-        host=host,
-        database=database
+    db_connection = mysql.connector.connection.MySQLConnection(
+        user=getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        password=getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        host=getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+        database=getenv("PERSONAL_DATA_DB_NAME")
     )
+
+    return db_connection
