@@ -7,7 +7,7 @@ API Authentication
 
 
 from flask import request
-from typing import List, TypeVar
+from typing import List, TypeVar, Optional
 
 
 class Auth:
@@ -17,8 +17,30 @@ class Auth:
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
             >> Does the current path require authentication.
+            >> Args:
+               > path (str): The path to evaluate.
+               > excluded_paths (List[str]): A list of paths..
+                 that do not require authentication.
+            >> Returns:
+               > bool: True if the path requires authentication.
+                 false if otherwise.
         """
-        return False  # "path and excluded_paths" to be used later.
+        if path is None:
+            return True
+        if not excluded_paths:
+            return True
+        # method must be slash tolerant
+        path = path + '/' if not path.endswith('/') else path
+        # Check if the normalized path is in the list of excluded paths
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('/'):
+                if path == excluded_path:
+                    return False
+            else:
+                if path == excluded_path + '/':
+                    return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         """
