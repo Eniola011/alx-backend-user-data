@@ -46,5 +46,5 @@ class SessionAuth(Auth):
         session_cookie = self.session_cookie(request)
         if session_cookie is None:
             return None
-        _my_session_id = self.user_id_for_session_id(request)
+        _my_session_id = self.user_id_for_session_id(session_cookie)
         return User.get(_my_session_id)
