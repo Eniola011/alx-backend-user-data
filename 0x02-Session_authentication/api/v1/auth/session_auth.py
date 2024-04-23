@@ -6,7 +6,8 @@ Session Authentication
 """
 
 
-from .auth import Auth
+from api.v1.auth.auth import Auth
+from models.user import User
 import uuid
 
 
@@ -37,3 +38,13 @@ class SessionAuth(Auth):
         return self.user_id_by_session_id.get(session_id)
         # Now you have 2 methods (create_session and user_id_for_session_id)..
         # for storing and retrieving a link between a User ID and a Session ID.
+
+    def current_user(self, request=None):
+        """
+           >> Returns a User instance based on a cookie value.
+        """
+        session_cookie = self.session_cookie(request)
+        if session_cookie is None:
+            return None
+        _my_session_id = self.user_id_for_session_id(request)
+        return User.get(_my_session_id)
