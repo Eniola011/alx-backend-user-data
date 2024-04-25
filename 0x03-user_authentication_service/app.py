@@ -7,6 +7,7 @@ Flask App
 
 
 from flask import Flask, jsonify, request, abort, make_response, redirect
+from sqlalchemy.orm.exc import NoResultFound
 from os import getenv
 from auth import Auth
 
@@ -62,11 +63,11 @@ def logout() -> str:
        >> Function responds to the DELETE /sessions route.
     """
     session_id = request.cookies.get('session_id')
-    user = AUTH.get_user_from_session_id(session_id)
-    if user:
+    try:
+        user = AUTH.get_user_from_session_id(session_id)
         AUTH.destroy_session(user_id)
         return redirect('/')
-    else:
+    except NoResultFound:
         abort(403)
 
 
