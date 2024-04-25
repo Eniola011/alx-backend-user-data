@@ -22,7 +22,7 @@ class SessionExpAuth(SessionAuth):
         """
         super().__init__()
         try:
-            self.session_duration = int(getenv('SESSION_NAME', 0))
+            self.session_duration = int(getenv('SESSION_DURATION', 0))
         except ValueError:
             self.session_duration = 0
 
