@@ -44,16 +44,15 @@ def login() -> str:
     """
     email = request.form.get('email')
     password = request.form.get('password')
+    is_valid_login = auth.valid_login(email, password)
 
-    if not email or not password:
-        abort(400)
-    if auth.valid_login(email, password):
+    if is_valid_login:
         session_id = auth.create_session(email)
-        if session_id:
-            response = jsonify({"email": email, "message": "logged in"})
-            response.set_cookie('session_id', session_id)
-            return response, 200
-    abort(401)
+        response = jsonify({"email": email, "message": "logged in"})
+        response.set_cookie('session_id', session_id)
+        return response, 200
+    else:
+        abort(401)
 
 
 if __name__ == "__main__":
