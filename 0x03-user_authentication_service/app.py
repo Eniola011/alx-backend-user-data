@@ -6,7 +6,7 @@ Flask App
 """
 
 
-from flask import Flask, jsonify, request, make_response, abort
+from flask import Flask, jsonify, request, abort
 from auth import Auth
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ auth = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def welcome() -> str:
+def karibu() -> str:
     """
        >> Welcome Message.
     """
@@ -31,7 +31,7 @@ def users() -> str:
 
     try:
         user = auth.register_user(email, password)
-        return jsonify({"email": email, "message":
+        return jsonify({"email": user.email, "message":
                         "user created"}), 200
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
@@ -48,9 +48,9 @@ def login() -> str:
 
     if is_valid_login:
         session_id = auth.create_session(email)
-        response = jsonify({"email": email, "message": "logged in"})
+        response = jsonify({"email": f"{email}", "message": "logged in"})
         response.set_cookie('session_id', session_id)
-        return response, 200
+        return response
     else:
         abort(401)
 
