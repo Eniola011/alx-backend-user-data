@@ -48,15 +48,19 @@ class SessionExpAuth(SessionAuth):
         """
            >> Get User ID from Session ID with Expiration.
         """
-        if session_id is None or session_id not in self.user_id_by_session_id:
+        if session_id is None:
             return None
 
-        session_dictionary = self.user_id_by_session_id[session_id]
+        session_dictionary = self.user_id_by_session_id.get(session_id)
+        if session_dictionary is None:
+            return None
         if self.session_duration <= 0:
             return session_dictionary.get('user_id')
+        created_at = session_dictionary.get('user_id')
+        if created_at is None:
+            return None
 
-        created_at = datetime.strptime(session_dictionary.get('created_at'),
-                                       "%Y-%m-%d %H:%M:%S")
+        created_at = datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
         expiration_time = created_at + timedelta(seconds=self.session_duration)
 
         if datetime.now() > expiration_time:
